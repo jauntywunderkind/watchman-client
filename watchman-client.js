@@ -4,28 +4,11 @@ import { promisify} from "util"
 import get from "voodoo-opt/get.js"
 import gets from "voodoo-opt/get.js"
 
-function WatchmanClient( opts){
-	return this
-}
-WatchmanClient.prototype= Object.assign( FbWatchman.Client.prototype, {
-	command: {
-		value: command
-	}
-	capabilityCheck: {
-		value: capabilityCheck
-	},
-	watchProject: {
-		value: watchProject
-	},
-	clock: {
-		value: clock
-	},
-	subscribe: {
-		value: subscribe
-	}
-})
+const FbClient= FbWatchman.Client 
 
+/** turn a function `fn` into a function with accepts an optional callback, and is async if there is no callback */
 function _makeOptionalPromisify( fn, argCount= 1){
+	// create & de-reference our function within an object, such that it retains `fn.name`
 	return ({[ fn.name]: function( ...args){
 		if( args.length> argCount){
 			return fn.call( this, ...args)
@@ -44,14 +27,13 @@ function _makeOptionalPromisify( fn, argCount= 1){
 }
 
 const
-	command= _makeOptionalPromisify( Client.command),
-	capabilityCheck= _makeOptionalPromisify( Client.capabilityCheck)
-
+	command= _makeOptionalPromisify( FbClient.prototype.command),
+	capabilityCheck= _makeOptionalPromisify( FbClient.prototype.capabilityCheck)
 
 function _makeCommand( cmd){
 	return ({[ cmd]: function( ...args){
 		return this.command([ cmd, ...args])
-	})
+	}})[ cmd]
 }
 
 const
@@ -59,3 +41,26 @@ const
 	clock= _makeCommand( "clock"),
 	subscribe= _makeCommand( "subscribe"),
 	unsubscribe= _makeCommand( "unsubscribe")
+
+export function WatchmanClient( opts){
+	return this
+}
+export default WatchmanClient
+
+WatchmanClient.prototype= Object.assign( FbClient.prototype, {
+	command: {
+		value: command
+	},
+	capabilityCheck: {
+		value: capabilityCheck
+	},
+	watchProject: {
+		value: watchProject
+	},
+	clock: {
+		value: clock
+	},
+	subscribe: {
+		value: subscribe
+	}
+})
