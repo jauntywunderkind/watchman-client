@@ -1,7 +1,7 @@
 {
 	"name": "watchman-client",
 	"version": "1.0.0",
-	"description": "",
+	"description": "shinier alternative to fb-watchman",
 	"main": "watchman-client.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,8 @@
 	"license": "MIT",
 	"module": "watchman-client.js",
 	"esm": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"fb-watchman": "^2.0.1"
+	}
 }
