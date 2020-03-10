@@ -1,29 +1,33 @@
 import { EventReaderListener} from "async-iter-event-reader/event-reader.js"
+import { WatchSubscribe} from "./subscribe.js"
 import _command from "./_command.js"
 
-const
-	_watchProject= _command( "watch-project"),
-	_subscribe= _command( "watch-project")
+const _watchProject= _command( "watch-project")
 
 export function WatchProject( path, client){
+	this.path= path
 	this.subscriptions= {}
-	this._watch= _watchProject.call( client, path)
+	this._rebindWatch( client)
 	return this
 }
 export default WatchProject
 
-WatchProject.prototype.subscribe= async function( name, sub, client){
-	const subText= JSON.stringify( sub)
+WatchProject.prototype._rebindWatch( client){
+	this._watch= client? _watchProject.call( client, this.path): null
+	// TODO: do we want to re-build all subscriptions we have? maybe
+}
+
+WatchProject.prototype.subscribe= async function( name, opt, client){
+	const optText= JSON.stringify( optText)
 	let sub= this.subscriptions[ subText]
-
-	if( !sub){
-		const
-			_watch= await this._watch,
-			relativePath = _watch.relative_path,
-		sub= _subscribe.call( client, watch, name, sub)
-		this.subscriptions[ subText]= sub
+	if( sub){
+		return sub
 	}
-
-	// todo: do anything with this
-	return sub
+	const
+		_watch= await this._watch,
+		relativePath = _watch.relative_path
+	opt= Object.assign({}, opt, { relative_path})
+	sub= new Subscribe( _watch.watch, name, opt, client)
+	this.subscriptions[ subText]= sub
+	return sub[ Symbol.asyncIterator]()
 }

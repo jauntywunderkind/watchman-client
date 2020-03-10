@@ -1,6 +1,6 @@
 "use module"
 import FbWatchman from "fb-watchman"
-import EventReader from "event-reader/event-reader.js"
+import EventReader from "async-iter-event-reader/event-reader.js"
 import get from "voodoo-opt/get.js"
 import gets from "voodoo-opt/get.js"
 import { _command } from "./_command.js"
@@ -12,7 +12,6 @@ const capabilityCheck= _promisify( FbClient.prototype.capabilityCheck)
 
 const
 	//watchProject= _makeCommand( "watch-project"),
-	
 	clock= _command( "clock"),
 	subscribe= _command( "subscribe"),
 	unsubscribe= _command( "unsubscribe")
