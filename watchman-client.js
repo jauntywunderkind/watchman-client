@@ -1,6 +1,7 @@
 "use module"
 import FbWatchman from "fb-watchman"
 import { promisify} from "util"
+import EventReader from "event-reader/event-reader.js"
 import get from "voodoo-opt/get.js"
 import gets from "voodoo-opt/get.js"
 
@@ -42,10 +43,15 @@ const
 	subscribe= _makeCommand( "subscribe"),
 	unsubscribe= _makeCommand( "unsubscribe")
 
-export function WatchmanClient( opts){
+export let WatchmanClient= function( opt){
+	EventReader.call( this, opt)
 	return this
 }
-export default WatchmanClient
+export {
+	WatchmanClient as default,
+	WatchmanClient as Watchman,
+	WatchmanClient as Client
+}
 
 WatchmanClient.prototype= Object.assign( FbClient.prototype, {
 	command: {
@@ -62,5 +68,6 @@ WatchmanClient.prototype= Object.assign( FbClient.prototype, {
 	},
 	subscribe: {
 		value: subscribe
-	}
+	},
+	...Object.getOwnPropertyDescriptors( EventReader.prototype)
 })

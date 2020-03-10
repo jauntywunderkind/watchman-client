@@ -17,6 +17,7 @@
 	"esm": true,
 	"type": "module",
 	"dependencies": {
+		"async-iter-event-reader": "^1.0.0",
 		"fb-watchman": "^2.0.1"
 	}
 }
