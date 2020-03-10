@@ -11,10 +11,11 @@ const FbClient= FbWatchman.Client
 const capabilityCheck= _promisify( FbClient.prototype.capabilityCheck)
 
 const
-	watchProject= _makeCommand( "watch-project"),
-	clock= _makeCommand( "clock"),
-	subscribe= _makeCommand( "subscribe"),
-	unsubscribe= _makeCommand( "unsubscribe")
+	//watchProject= _makeCommand( "watch-project"),
+	
+	clock= _command( "clock"),
+	subscribe= _command( "subscribe"),
+	unsubscribe= _command( "unsubscribe")
 
 export let WatchmanClient= function( opt){
 	EventReader.call( this, opt)
@@ -51,6 +52,6 @@ function watchProject( path){
 		return this.project[ path]
 	}
 	const watchProject= new WatchProject( path, this)
-	this.project[ path]= watchProject:w
+	this.project[ path]= watchProject
 	return watchProject
 }
