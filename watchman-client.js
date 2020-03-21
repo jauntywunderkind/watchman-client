@@ -18,7 +18,7 @@ const
 
 export let WatchmanClient= function( opt){
 	EventReader.call( this, opt)
-	this.project= []
+	this.project= {}
 	return this
 }
 export {

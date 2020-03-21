@@ -1,2 +1,5 @@
 #!/usr/bin/env node
-import WatchmanClient from "../watchman-client.js"
+import tape from "tape"
+
+import integration from "./integration.js"
+integration()

@@ -1,3 +1,3 @@
 # watchman-client
 
-> shinier alternative to fb-watchman
+> shinier wrapper atop fb-watchman

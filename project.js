@@ -1,4 +1,6 @@
 import { EventReaderListener} from "async-iter-event-reader/event-reader.js"
+import CanonicalStringify from "canonical-json/index2.js"
+
 import { WatchSubscribe} from "./subscribe.js"
 import _command from "./_command.js"
 
@@ -18,7 +20,7 @@ WatchProject.prototype._rebindWatch( client){
 }
 
 WatchProject.prototype.subscribe= async function( name, opt, client){
-	const optText= JSON.stringify( optText)
+	const optText= CanonicalStringify( opt)
 	let sub= this.subscriptions[ subText]
 	if( sub){
 		return sub
