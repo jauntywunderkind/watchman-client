@@ -8,7 +8,7 @@ import { _promisify} from "./_promisify.js"
 
 const FbClient= FbWatchman.Client 
 
-const capabilityCheck= _promisify( FbClient.prototype.capabilityCheck)
+const capabilityCheck= _promisify( FbClient.prototype.capabilityCheck, {name: "capabilityCheck"})
 
 const
 	//watchProject= _makeCommand( "watch-project"),
@@ -17,6 +17,7 @@ const
 	unsubscribe= _command( "unsubscribe")
 
 export let WatchmanClient= function( opt){
+	FbClient.call( this, opt)
 	EventReader.call( this, opt)
 	this.project= {}
 	return this
@@ -27,7 +28,7 @@ export {
 	WatchmanClient as Client
 }
 
-WatchmanClient.prototype= Object.assign( FbClient.prototype, {
+WatchmanClient.prototype= Object.create( FbClient.prototype, {
 	command: {
 		value: _command
 	},
@@ -40,9 +41,9 @@ WatchmanClient.prototype= Object.assign( FbClient.prototype, {
 	clock: {
 		value: clock
 	},
-	subscribe: {
-		value: subscribe
-	},
+	//subscribe: {
+	//	value: subscribe
+	//},
 	...Object.getOwnPropertyDescriptors( EventReader.prototype)
 })
 
