@@ -8,10 +8,9 @@ import { _promisify} from "./_promisify.js"
 
 const FbClient= FbWatchman.Client 
 
-const capabilityCheck= _promisify( FbClient.prototype.capabilityCheck, {
-	argCount: 1,
-	name: "capabilityCheck"
-})
+const
+	capabilityCheck= _promisify( FbClient.prototype.capabilityCheck, { name: "capabilityCheck"}),
+	command= _promisify( FbClient.prototype.command)
 
 const
 	//watchProject= _makeCommand( "watch-project"),
@@ -33,7 +32,7 @@ export {
 
 WatchmanClient.prototype= Object.create( FbClient.prototype, {
 	command: {
-		value: _command
+		value: command
 	},
 	capabilityCheck: {
 		value: capabilityCheck

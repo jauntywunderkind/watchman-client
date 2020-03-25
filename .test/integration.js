@@ -10,10 +10,13 @@ const capabilities= {
 }
 
 export const
-	checkAvailability= _mint( "checkAvailability", "integration test - check availability", async function( t){
+	capabilityCheck= _mint( "capabilityCheck", "integration test - check availability", async function( t){
 		const
 			w= new WatchmanClient({}),
-			av= await w.capabilityCheck( capabilities)
+			cc= await w.capabilityCheck( capabilities)
+		t.ok( cc, "reply")
+		t.ok( cc.capabilities, "capabilities")
+		t.equal( cc.capabilities.relative_root, true, "has relative_root")
 		t.end()
 	}),
 	subscribe= _mint( "subscribe", "integration test - subscribe to watchman-client project", async function( t){
@@ -25,7 +28,7 @@ export const
 	integration= async function(){
 		const runner= await import("./_run_exports.js")
 		return runner.default({
-			checkAvailability,
+			capabilityCheck,
 			subscribe
 		})
 	}

@@ -5,9 +5,12 @@ const FbClient= FbWatchman.Client
 
 export const __command= _promisify( FbClient.prototype.command)
 
+/**
+* Make a specific command `cmd`
+*/
 export function _command( cmd){
 	return ({[ cmd]: function( ...args){
-		return this.command([ cmd, ...args])
+		return __command.call([ cmd, ...args])
 	}})[ cmd]
 }
 export default _command
