@@ -15,9 +15,7 @@ export function _promisify( fn, { argCount= 0, name}= { name: fn.name}){
 
 		// run
 		return new Promise(( resolve, reject)=>{
-			console.log("begin", this, args, fn)
 			fn.call( this, ...args, function( err, ok){
-				console.log("hi")
 				if( err){
 					reject( err)
 				}else{
