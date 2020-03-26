@@ -16,7 +16,6 @@ const
 
 const
 	//watchProject= _makeCommand( "watch-project"),
-	clock= _command( "clock"),
 	subscribe= _command( "subscribe"),
 	unsubscribe= _command( "unsubscribe")
 
@@ -41,10 +40,7 @@ WatchmanClient.prototype= Object.create( FbClient.prototype, {
 	},
 	watchProject: {
 		value: watchProject
-	},
-	clock: {
-		value: clock
-	},
+	}
 	//subscribe: {
 	//	value: subscribe
 	//},
