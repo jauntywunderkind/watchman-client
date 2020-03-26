@@ -35,22 +35,22 @@ WatchProject.prototype.clock= async function(){
 	return _clock.call( this.client, _watch.watch)
 }
 
-WatchProject.prototype.subscribe= async function( name, sub, client){
+WatchProject.prototype.subscribe= async function( name, sub){
 	sub= sub|| {}
 	let s= this.subscription[ name]
 	if( s){
 		return s
 	}
 
-	const 
-		[ relative_path, since]= await Promise.all([
+	const
+		[ relative_path, clock]= await Promise.all([
 			this.relative_path(),
-			sub.clock=== true? client.clock(): null
+			sub.since=== true? this.clock(): null
 		]),
+		since= clock.clock|| sub.since,
 		fields= sub.fields|| AllFields,
-		_sub= Object.assign({ fields, ...(since&& {since}), relative_path}, sub)
+		_sub= Object.assign({ fields, relative_path}, sub, { since})
 
-console.log({since})
 	s= new Subscribe( name, _sub, this)
 	this.subscription[ name]= s
 	return s

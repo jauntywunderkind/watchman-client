@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { utimes} from "fs"
 import tape from "tape"
 import { dirname} from "path"
 
@@ -57,13 +58,39 @@ export const
 			watchmanClientPath= dirname( import.meta.url.substring( 7)),
 			project= await w.watchProject( watchmanClientPath),
 			sub= await project.subscribe( "int-sub-1"),
+			_sub= await sub._subscribe
+		t.equal( _sub.subscribe, "int-sub-1", "got our subscription")
+		t.ok( _sub.clock, "clock")
+		w.end()
+		t.end()
+	}),
+	touch= _mint.only( "touch", "integration test - watch touch .test directory", async function( t){
+		const
+			w= new WatchmanClient({}),
+			watchmanClientPath= dirname( import.meta.url.substring( 7)),
+			project= await w.watchProject( watchmanClientPath),
+			sub= await project.subscribe( "int-sub-1", {since:true}),
 			iter= sub[ Symbol.asyncIterator](),
 			first= iter.next()
 
-		sub._subscribe.then(console.log)
-		first.then(console.log)
-		
-		//w.end()
+		// touch .test
+		const now= new Date()
+		utimes(__dirname, now, now, function(){})
+
+		// read out this change
+		const change= await first
+		t.equal( change.value.files[0].name, ".test", ".test changed")
+		w.end()
+		t.end()
+	}),
+	createDelete= _mint( "createDelete", "integration test - watch create delete", async function( t){
+		const
+			w= new WatchmanClient({}),
+			watchmanClientPath= dirname( import.meta.url.substring( 7)),
+			project= await w.watchProject( watchmanClientPath),
+			sub= await project.subscribe( "int-sub-1")
+		// TODO
+		w.end()
 		t.end()
 	}),
 	integration= async function(){
@@ -73,7 +100,9 @@ export const
 			clock,
 			badWatch,
 			watch,
-			subscribe
+			subscribe,
+			touch,
+			createDelete
 		})
 	}
 export default integration
