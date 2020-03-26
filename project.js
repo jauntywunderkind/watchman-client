@@ -1,6 +1,7 @@
 import { EventReaderListener} from "async-iter-event-reader/event-reader.js"
 import CanonicalStringify from "canonical-json/index2.js"
 
+import { AllFields} from "./fields.js"
 import { Subscribe} from "./subscribe.js"
 import _command from "./_command.js"
 
@@ -23,9 +24,9 @@ export {
 WatchProject.prototype._rebindWatch= function(){
 	if( !this.client){
 		this._watch= Promise.reject("No Watch")
-	}else{
-		this._watch= _watchProject.call( this.client, this.path)
+		return
 	}
+	this._watch= _watchProject.call( this.client, this.path)
 	// TODO: do we want to re-build all subscription we have? maybe
 }
 
@@ -36,20 +37,22 @@ WatchProject.prototype.clock= async function(){
 
 WatchProject.prototype.subscribe= async function( name, sub, client){
 	sub= sub|| {}
-	const subText= CanonicalStringify( sub)
-	let s= this.subscription[ subText]
+	let s= this.subscription[ name]
 	if( s){
 		return s
 	}
 
-	const [ relative_path, watch, clock]= await Promise.all([
-		this.relative_path(),
-		this.watch(),
-		sub.clock=== true? client.clock(): null
-	])
-	sub= Object.assign({}, { clock, relative_path}, sub)
-	s= new Subscribe( watch, name, sub, client)
-	this.subscription[ subText]= s
+	const 
+		[ relative_path, since]= await Promise.all([
+			this.relative_path(),
+			sub.clock=== true? client.clock(): null
+		]),
+		fields= sub.fields|| AllFields,
+		_sub= Object.assign({ fields, ...(since&& {since}), relative_path}, sub)
+
+console.log({since})
+	s= new Subscribe( name, _sub, this)
+	this.subscription[ name]= s
 	return s
 };
 

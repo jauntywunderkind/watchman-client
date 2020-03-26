@@ -56,10 +56,14 @@ export const
 			w= new WatchmanClient({}),
 			watchmanClientPath= dirname( import.meta.url.substring( 7)),
 			project= await w.watchProject( watchmanClientPath),
-			sub= project.subscribe()
-		console.log(project)
-		t.equal( await project.relative_path(), ".test", "found .test directory")
-		w.end()
+			sub= await project.subscribe( "int-sub-1"),
+			iter= sub[ Symbol.asyncIterator](),
+			first= iter.next()
+
+		sub._subscribe.then(console.log)
+		first.then(console.log)
+		
+		//w.end()
 		t.end()
 	}),
 	integration= async function(){

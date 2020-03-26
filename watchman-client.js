@@ -23,6 +23,9 @@ export let WatchmanClient= function( opt){
 	FbClient.call( this, opt)
 	//EventReader.call( this, opt)
 	this.project= {}
+	this.on( "subscription", resp=> {
+		this.emit( resp.subscription, resp)
+	})
 	return this
 }
 export {
