@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import tape from "tape"
+import { dirname} from "path"
 
 import WatchmanClient from "../watchman-client.js"
 import _mint from "./_mint.js"
@@ -19,13 +20,13 @@ export const
 		t.equal( cc.capabilities.relative_root, true, "has relative_root")
 		t.end()
 	}),
-	badWatch= _mint.only("badWatch", "integration test - fail to watch a non-existant project", async function( t){
+	badWatch= _mint("badWatch", "integration test - fail to watch a non-existant project", async function( t){
 		const w= new WatchmanClient({})
 		try{
-			await w.watchProject("i-have-had-it-with-these-snakes-on-this-plane")
+			await w.watchProject("/i-have-had-it-with-these-snakes-on-this-plane")
 			t.fail("project ought not have existed")
 		}catch(err){
-			t.ok( err.error, "project confirmed not existing")
+			t.ok( err, "project confirmed not existing")
 		}
 		w.end()
 		t.end()
@@ -33,7 +34,9 @@ export const
 	subscribe= _mint( "subscribe", "integration test - subscribe to watchman-client project", async function( t){
 		const
 			w= new WatchmanClient({}),
-			project= await w.watchProject("watchman-client")
+			watchmanClientPath= dirname( import.meta.url.substring( 7)),
+			project= await w.watchProject( watchmanClientPath)
+		w.end()
 		t.end()
 	}),
 	integration= async function(){

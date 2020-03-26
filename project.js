@@ -14,9 +14,12 @@ export function WatchProject( path, client){
 }
 export default WatchProject
 
+WatchProject.prototype.then= function( ok, bad){
+	return this._watch.then( ok, bad)
+}
+
 WatchProject.prototype._rebindWatch= function( client){
-	this._watch= client? _watchProject.call( client, this.path): null
-	this._watch.catch(()=> this._watch= null)
+	this._watch= client? _watchProject.call( client, this.path): Promise.reject("No Watch")
 	// TODO: do we want to re-build all subscriptions we have? maybe
 }
 
