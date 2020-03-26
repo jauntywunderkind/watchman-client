@@ -6,9 +6,14 @@ const _subscribe= _command( "watch-project")
 export function WatchSubscribe( watch, name, opt, client){
 	this.name= name
 	this.opt= opt
-	this._rebindSubscribe( client)
+	this._rebindSubscribe()
 	return this
 }
-export default WatchSubscribe
+export {
+	WatchSubscribe as default,
+	WatchSubscribe as Subscribe
+}
 
-WatchSubscribe
+WatchSubscribe.prototype._rebindSubscribe= function(){
+	
+}

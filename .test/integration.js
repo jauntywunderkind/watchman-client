@@ -54,9 +54,10 @@ export const
 		const
 			w= new WatchmanClient({}),
 			watchmanClientPath= dirname( import.meta.url.substring( 7)),
-			project= await w.watchProject( watchmanClientPath)._watch
+			project= await w.watchProject( watchmanClientPath),
+			sub= project.subscribe()
 		console.log(project)
-		t.equal( project.relative_path, ".test", "found .test directory")
+		t.equal( await project.relative_path(), ".test", "found .test directory")
 		w.end()
 		t.end()
 	}),
