@@ -3,6 +3,8 @@ import FbWatchman from "fb-watchman"
 //import EventReader from "async-iter-event-reader/event-reader.js"
 import get from "voodoo-opt/get.js"
 import gets from "voodoo-opt/get.js"
+
+import Project from "./project.js"
 import { _command } from "./_command.js"
 import { _promisify} from "./_promisify.js"
 
@@ -50,10 +52,10 @@ WatchmanClient.prototype= Object.create( FbClient.prototype, {
 })
 
 function watchProject( path){
-	if( this.project[ project]){
+	if( this.project[ path]){
 		return this.project[ path]
 	}
-	const watchProject= new WatchProject( path, this)
+	const watchProject= new Project( path, this)
 	this.project[ path]= watchProject
 	return watchProject
 }

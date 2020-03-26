@@ -19,16 +19,28 @@ export const
 		t.equal( cc.capabilities.relative_root, true, "has relative_root")
 		t.end()
 	}),
+	badWatch= _mint.only("badWatch", "integration test - fail to watch a non-existant project", async function( t){
+		const w= new WatchmanClient({})
+		try{
+			await w.watchProject("i-have-had-it-with-these-snakes-on-this-plane")
+			t.fail("project ought not have existed")
+		}catch(err){
+			t.ok( err.error, "project confirmed not existing")
+		}
+		w.end()
+		t.end()
+	}),
 	subscribe= _mint( "subscribe", "integration test - subscribe to watchman-client project", async function( t){
 		const
 			w= new WatchmanClient({}),
-			p= await w.project("watchman-client")
+			project= await w.watchProject("watchman-client")
 		t.end()
 	}),
 	integration= async function(){
 		const runner= await import("./_run_exports.js")
 		return runner.default({
 			capabilityCheck,
+			badWatch,
 			subscribe
 		})
 	}

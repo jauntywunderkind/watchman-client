@@ -10,7 +10,7 @@ export const __command= _promisify( FbClient.prototype.command)
 */
 export function _command( cmd){
 	return ({[ cmd]: function( ...args){
-		return __command.call([ cmd, ...args])
+		return __command.call( this, [ cmd, ...args])
 	}})[ cmd]
 }
 export default _command
