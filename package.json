@@ -18,6 +18,7 @@
 	"type": "module",
 	"dependencies": {
 		"async-iter-event-reader": "^1.0.0",
+		"async-iter-fan-out": "^1.0.0",
 		"canonical-json": "0.0.4",
 		"fb-watchman": "^2.0.1"
 	},

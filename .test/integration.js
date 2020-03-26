@@ -20,6 +20,7 @@ export const
 		t.ok( cc, "reply")
 		t.ok( cc.capabilities, "capabilities")
 		t.equal( cc.capabilities.relative_root, true, "has relative_root")
+		w.end()
 		t.end()
 	}),
 	badWatch= _mint( "badWatch", "integration test - fail to watch a non-existant project", async function( t){
